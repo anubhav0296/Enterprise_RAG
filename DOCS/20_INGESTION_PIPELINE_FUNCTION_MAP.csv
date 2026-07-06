@@ -1,0 +1,17 @@
+Level,Component,File,Function,Short_Description,Input,Output
+Overview,Input discovery,app/ingestion/processor.py,run_universal_ingestion,Scans DATA folders and finds files,base directory,files to process
+Overview,Directory loop,app/ingestion/processor.py,process_directory,Iterates through files within one directory,directory path,list of file paths
+Overview,Per-file orchestration,app/ingestion/processor.py,process_file,Coordinates parsing, chunking, storage, embedding, and indexing,file path + filename + source type,processed vector records
+Overview,Raw storage,app/ingestion/processor.py,upload_to_gcs,Uploads original files or JSON to GCS,file path or JSON payload,GCS object
+Parsing,PDF parser,app/ingestion/loaders/pdf.py,parse_pdf,Extracts text from PDF files using Document AI,PDF file path,plain text
+Parsing,PDF chunk helper,app/ingestion/loaders/pdf.py,process_document_chunk,Sends a PDF chunk to Document AI,PDF bytes,OCR/text output
+Parsing,HTML parser,app/ingestion/loaders/html.py,parse_html,Removes HTML noise and extracts readable text,HTML file path,plain text
+Parsing,Text parser,app/ingestion/loaders/text.py,parse_text,Reads plain text content,TXT file path,plain text
+Parsing,Office parser,app/ingestion/loaders/office.py,parse_office,Extracts text from DOCX/PPTX,office document path,plain text
+Chunking,Chunker,app/ingestion/chunking/splitter.py,chunk_text,Split large text into paragraph-based chunks,full text,list of text chunks
+Embedding,Model loader,app/services/retrieval/embedding.py,get_embedding_model,Loads the Vertex AI embedding model,none,embedding model
+Embedding,Query embedder,app/services/retrieval/embedding.py,embed_query,Embeds a single query string,query text,embedding vector
+Embedding,Batch embedder,app/services/retrieval/embedding.py,embed_texts,Embeds chunks in batches,chunk list,list of embedding vectors
+Vector DB,Qdrant setup,app/ingestion/processor.py,run_universal_ingestion,Checks collection existence and creates it if missing,Qdrant config,collection ready
+Vector DB,Indexing,app/ingestion/processor.py,process_file,Upserts chunk embeddings into Qdrant,chunk vectors + metadata,Qdrant points
+Config,Settings,app/config.py,Settings,Loads environment and GCP/Qdrant settings,environment variables,settings object
